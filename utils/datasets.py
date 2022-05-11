@@ -235,7 +235,12 @@ class LoadImages:
         else:
             # Read image
             self.count += 1
-            img0 = cv2.imread(path)  # BGR
+            #img0 = cv2.imread(path)  # BGR
+            im = cv2.imread(path,cv2.IMREAD_UNCHANGED)  # Grayscale
+            #im=cv2.cvtColor(im,cv2.COLOR_GRAY2RGB)
+            im=cv2.cvtColor(im,cv2.COLOR_GRAY2BGR)
+
+            img0 =20 * np.log10(im[:,:,:])
             assert img0 is not None, f'Image Not Found {path}'
             s = f'image {self.count}/{self.nf} {path}: '
 
@@ -660,7 +665,12 @@ class LoadImagesAndLabels(Dataset):
             if fn.exists():  # load npy
                 im = np.load(fn)
             else:  # read image
-                im = cv2.imread(f)  # BGR
+                im = cv2.imread(f,cv2.IMREAD_UNCHANGED)  # Grayscale
+                #print('filepath',f)
+                #cv2.imwrite('orig.tiff', im)
+                im=cv2.cvtColor(im,cv2.COLOR_GRAY2BGR)
+                im =20 * np.log10(im[:,:,:])
+                #cv2.imwrite('changed.tiff', im)
                 assert im is not None, f'Image Not Found {f}'
             h0, w0 = im.shape[:2]  # orig hw
             r = self.img_size / max(h0, w0)  # ratio

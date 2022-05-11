@@ -18,3 +18,5 @@ for x in models:
     attempt_download(f'yolov5{x}.pt')
 
 EOF
+
+
